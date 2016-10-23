@@ -1,0 +1,25 @@
+{
+  "name": "goto",
+  "version": "1.0.0",
+  "description": "A simplistic short links server.",
+  "main": "server.js",
+  "dependencies": {
+    "mongoose": "^4.6.4",
+    "url": "^0.11.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fwouts/goto.git"
+  },
+  "author": "François Wouts",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/fwouts/goto/issues"
+  },
+  "homepage": "https://github.com/fwouts/goto#readme"
+}
