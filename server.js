@@ -2,12 +2,15 @@
 
 const http = require('http');
 const mongoose = require('mongoose');
+const url = require('url');
 
 const PORT = 80;
 const DB_NAME = 'goto';
 
+const REGISTER_PATH = '/register/';
+
 const DB_LINK_SCHEMA = mongoose.Schema({
-  key: String,
+  key: { type: String, unique: true },
   url: String
 });
 const Link = mongoose.model('Link', DB_LINK_SCHEMA);
@@ -26,10 +29,34 @@ server.listen(PORT, () => {
 
 function handleRequest(request, response) {
   if (request.method == 'GET') {
-    return handleRedirectionRequest(request, response);
+    if (request.url.startsWith(REGISTER_PATH)) {
+      return handleRegisterRequest(request, response);
+    } else {
+      return handleRedirectionRequest(request, response);
+    }
   } else {
     // TODO: Allow adding/changing/deleting links.
   }
+}
+
+function handleRegisterRequest(request, response) {
+  let parsedUrl = url.parse(request.url, true);
+  let key = parsedUrl.pathname.substr(REGISTER_PATH.length);
+  let link = new Link({
+    key: key,
+    url: parsedUrl.query.url
+  });
+  link.save((err, link) => {
+    if (err) {
+      response.end('Could not save');
+      console.log(err);
+      return;
+    }
+    response.writeHead(302, {
+      'Location': link.url
+    });
+    response.end();
+  });
 }
 
 function handleRedirectionRequest(request, response) {
